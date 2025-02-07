@@ -104,7 +104,7 @@ docker run -d --name mon_app -p 3000:3000 ma_super_app
 ## Compléter le fichier `docker.compose.yml`
 ### Compléter le fichier `docker-compose.yml` afin d’éxécuter `ma_super_app` avec sa base de données.
 - Voici le contenu du fichier` docker-compose.yml `:
-```bash
+```yaml
   services:
     node:
       build: .
