@@ -10,7 +10,7 @@ FROM node:12-alpine3.9
 WORKDIR /app
 
 # Copier uniquement package.json pour optimiser le cache
-COPY package*.json ./
+COPY package.json ./
 
 # Installer les dépendances de production uniquement
 RUN npm install --only=production
@@ -26,20 +26,20 @@ CMD ["node", "srv/index.js"]
 
 ```
 ### Explication pour chaque ligne :
-### Choisir l’image de base `FROM node:12-alpine3.9`
+### Choisir l’image de base : `FROM node:12-alpine3.9`
 - Que fait cette ligne ?
 `FROM` → Définit l’image de base sur laquelle on va construire l’image Docker.  
 `node:12-alpine3.9 `→ Utilise `Node.js` version` 12 `basée sur `Alpine` Linux, qui est très légère et optimisée.  
 - Pourquoi `Alpine` ?
 Image plus petite (moins de 10 Mo au lieu de 300 Mo pour `Debian`). Moins de ressources utilisées.
-### Définir un répertoire de travail `WORKDIR /app`
+### Définir un répertoire de travail : `WORKDIR /app`
 - Que fait cette ligne ?
 `WORKDIR /app` → Définit le répertoire de travail dans le conteneur.  
 Toutes les commandes suivantes (comme `COPY`, `RUN`, `CMD`) s’exécuteront à l’intérieur de `/app`.
 - Pourquoi utiliser `WORKDIR` ?
 Assure que tout le code et les dépendances seront dans `/app` et pas ailleurs.  
 Évite d’écrire `cd /app` dans chaque commande.
-### Copier uniquement `package.json` pour optimiser le cache `COPY package.json ./`
+### Copier uniquement `package.json` pour optimiser le cache : `COPY package.json ./`
 - Que fait cette ligne ?
 `COPY package.json ./` → Copie `package.json` dans `/app` (défini par `WORKDIR`).  
 `./` signifie "copie à la racine du répertoire de travail (`/app`)".
@@ -48,7 +48,7 @@ Docker garde en cache les étapes de construction.
 Si on copie tout avant d’installer les dépendances, chaque modification dans un fichier (même un petit changement dans `index.js`) obligera Docker à réinstaller toutes les dépendances.  
 En copiant d’abord `package.json`, Docker peut réutiliser le cache pour accélérer la construction.
 
-### Installer uniquement les dépendances de production `RUN npm install --only=production`
+### Installer uniquement les dépendances de production : `RUN npm install --only=production`
 - Que fait cette ligne ?
 `RUN` → Exécute une commande pendant la construction de l’image.  
 `npm install --only=production` → Installe seulement les dépendances de production (exclut `devDependencies`).
@@ -56,14 +56,14 @@ En copiant d’abord `package.json`, Docker peut réutiliser le cache pour accé
 Les dépendances de développement ne sont pas nécessaires en production.  
 Cela réduit la taille de l’image et accélère le lancement.
 
-### Copier le reste des fichiers `COPY . . `
+### Copier le reste des fichiers : `COPY . . `
 - Que fait cette ligne ?
 `COPY . . `→ Copie tout ce qui est dans le projet vers `/app` dans le conteneur.
 - Pourquoi ne pas faire ça dès le début ?
 Si `package.json` ne change pas, Docker peut utiliser le cache et éviter de réinstaller les dépendances.  
 Cette approche accélère la construction.
 
-### Exposer le port utilisé par Express.js `EXPOSE 3000`
+### Exposer le port utilisé par Express.js : `EXPOSE 3000`
  - Que fait cette ligne ?
 `EXPOSE 3000 `→ Informe Docker que le conteneur utilise le port` 3000`.  
 `Express.js` écoute sur ce port (`PORT=3000` dans `index.js`).
@@ -71,7 +71,7 @@ Cette approche accélère la construction.
 Non, mais c'est une bonne pratique.  
 Il faudra quand même publier le port via `docker run -p 3000:3000`.
 
-### Définir la commande de lancement `CMD ["node", "srv/index.js"]`
+### Définir la commande de lancement : `CMD ["node", "srv/index.js"]`
 - Que fait cette ligne ?
 `CMD` → Définit la commande principale exécutée lorsque le conteneur démarre.  
 `["node", "srv/index.js"] `→ Lance `Node.js `et exécute `index.js `qui est dans le dossier `srv/`.
