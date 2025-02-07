@@ -101,7 +101,7 @@ docker run -d --name mon_app -p 3000:3000 ma_super_app
 ```
 ### L’application tourne maintenant sur` http://localhost:3000` !
 
-## Compléter le fichier `docker.compose.yml`
+## 3. Compléter le fichier `docker.compose.yml` et rebuilder :
 ### Compléter le fichier `docker-compose.yml` afin d’éxécuter `ma_super_app` avec sa base de données.
 - Voici le contenu du fichier` docker-compose.yml `:
 ```yaml
@@ -169,7 +169,7 @@ docker logs ma_super_app
 docker logs mysql_container
 
 ```
-- Tester la connexion entre Node.js et MySQL :
+- Tester la connexion entre `Node.js` et `MySQL` :
 
 ```bash
 docker exec -it ma_super_app sh
@@ -177,7 +177,7 @@ ping mysql
 
 ```
 
-### Les commandes utils:
+### Les commandes utiles:
 ```bash
 docker ps
 docker ps -a
