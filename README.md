@@ -1,5 +1,5 @@
 # Docker TP 2 - `Docker Application Express JS`
-## Compléter le `Dockerfile `
+## 1. Compléter le `Dockerfile `
 ### Compléter le `Dockerfile` afin de builder correctement l’application contenu dans `srv/`
 - Chaque instruction a un rôle précis pour construire une image Docker:
 ```bash
@@ -79,7 +79,7 @@ Il faudra quand même publier le port via `docker run -p 3000:3000`.
 `RUN` → S’exécute lors de la construction de l’image.  
 `CMD` → S’exécute chaque fois qu’on lance le conteneur.
 
-## Créer un image avec le `Dockerfile`
+## 2. Créer un image avec le `Dockerfile`
 ### Se placer dans le dossier contenant le `Dockerfile`, puis exécuter :
 ```bash
 docker build -t ma_super_app .
