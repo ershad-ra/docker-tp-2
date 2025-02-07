@@ -1,6 +1,41 @@
-  services:
-    node:
-      ...
+services:  # Déclaration des services (conteneurs) à exécuter
+  node:  # Définition du service Node.js
+    build: .  # Construit l'image Docker à partir du Dockerfile dans le répertoire courant
+    container_name: ma_super_app  # Donne un nom personnalisé au conteneur
+    restart: always  # Redémarre le conteneur automatiquement en cas d'arrêt
+    environment:  # Définition des variables d'environnement (base de données, port, etc.)
+      - PORT=3000
+      - DATABASE_HOST=mysql
+      - DATABASE_PORT=3306
+      - DATABASE_USERNAME=ershad
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=tpdb
+    ports:  
+      - "3000:3000"  # Mappe le port 3000 du conteneur sur le port 3000 de la machine hôte
+    depends_on:
+      - mysql  # Assure que le conteneur MySQL démarre avant Node.js
+    networks:
+      - app_network  # Connecte le service Node.js au réseau `app_network`
 
-    mysql:
-      ...
+  mysql:  # Définition du service MySQL
+    image: mysql:5.7  # Utilise l'image officielle de MySQL version 5.7
+    container_name: mysql_container  # Donne un nom personnalisé au conteneur MySQL
+    restart: always  # Redémarre le conteneur automatiquement en cas d'arrêt
+    environment:  # Variables d'environnement pour configurer MySQL
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=tpdb
+      - MYSQL_USER=ershad
+      - MYSQL_PASSWORD=password
+    ports:
+      - "3306:3306"  # Mappe le port 3306 du conteneur sur le port 3306 de la machine hôte
+    networks:
+      - app_network  # Connecte MySQL au même réseau que Node.js
+    volumes:
+      - mysql_data:/var/lib/mysql  # Associe un volume persistant pour stocker les données MySQL
+
+volumes:
+  mysql_data:  # Déclare un volume nommé `mysql_data` pour la persistance des données MySQL
+
+networks:
+  app_network:  # Déclare un réseau Docker pour permettre la communication entre les services
+    driver: bridge  # Utilise le driver `bridge`, idéal pour la communication entre conteneurs sur le même hôte

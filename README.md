@@ -101,6 +101,82 @@ docker run -d --name mon_app -p 3000:3000 ma_super_app
 ```
 ### L’application tourne maintenant sur` http://localhost:3000` !
 
+## Compléter le fichier `docker.compose.yml`
+### Compléter le fichier `docker-compose.yml` afin d’éxécuter `ma_super_app` avec sa base de données.
+- Voici le contenu du fichier` docker-compose.yml `:
+```bash
+  services:
+    node:
+      build: .
+      container_name: ma_super_app
+      restart: always
+      environment:
+        - PORT=3000
+        - DATABASE_HOST=mysql
+        - DATABASE_PORT=3306
+        - DATABASE_USERNAME=ershad
+        - DATABASE_PASSWORD=password
+        - DATABASE_NAME=tpdb
+      ports:
+        - "3000:3000"
+      depends_on:
+        - mysql
+      networks:
+        - app_network
+
+    mysql:
+      image: mysql:5.7
+      container_name: mysql_container
+      restart: always
+      environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=tpdb
+      - MYSQL_USER=ershad
+      - MYSQL_PASSWORD=password
+      ports:
+        - "3306:3306"
+      networks:
+        - app_network
+      volumes:
+        - mysql_data:/var/lib/mysql
+
+  volumes:
+    mysql_data:
+  
+  networks:
+    app_network:
+      driver: bridge
+```
+
+- Arrêter et supprimer d’anciens conteneurs :
+
+```bash
+docker-compose down -v
+
+```
+
+- Rebuild et lancer les conteneurs :
+
+```bash
+docker-compose up -d --build
+
+```
+
+- Vérifier les logs :
+
+```bash
+docker logs ma_super_app
+docker logs mysql_container
+
+```
+- Tester la connexion entre Node.js et MySQL :
+
+```bash
+docker exec -it ma_super_app sh
+ping mysql
+
+```
+
 ### Les commandes utils:
 ```bash
 docker ps
@@ -109,4 +185,5 @@ docker logs mon_app
 docker stop mon_app
 docker rm mon_app
 docker rmi ma_super_app # Pour supprimer l'image aussi
+docker-compose up -d --build # Forcer le build de l'image à partir de Dockerfile
 ```
